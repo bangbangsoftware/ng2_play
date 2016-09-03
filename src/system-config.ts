@@ -20,35 +20,50 @@ const packages: any = {
   '@angular2-material/core': { 
     format: 'cjs',
     defaultExtension: 'js',
-    main: 'core.js'
+    main: 'core.umd.js'
   },
   '@angular2-material/checkbox': { 
-    main: 'checkbox.js', 
+    main: 'checkbox.umd.js', 
     defaultExtension: 'js', 
     format: 'cjs' 
   },
   '@angular2-material/button': { 
-    main: 'button.js', 
+    main: 'button.umd.js', 
     defaultExtension: 'js', 
     format: 'cjs' 
   },
   '@angular2-material/progress-circle': { 
-    main: 'progress-circle.js', 
+    main: 'progress-circle.umd.js', 
     defaultExtension: 'js', 
     format: 'cjs' 
   },
   '@angular2-material/card': { 
-    main: 'card.js', 
+    main: 'card.umd.js', 
     defaultExtension: 'js', 
     format: 'cjs' 
   },
   '@angular2-material/input': { 
-    main: 'input.js', 
+    main: 'input.umd.js', 
     defaultExtension: 'js', 
     format: 'cjs' 
   },
   '@angular2-material/toolbar': { 
-    main: 'toolbar.js', 
+    main: 'toolbar.umd.js', 
+    defaultExtension: 'js', 
+    format: 'cjs' 
+  },
+  '@angular2-material/list': { 
+    main: 'list.umd.js', 
+    defaultExtension: 'js', 
+    format: 'cjs' 
+   },
+   '@angular2-material/button-toggle': { 
+    main: 'button-toggle.umd.js', 
+    defaultExtension: 'js', 
+    format: 'cjs' 
+   },
+  '@angular2-material/sidenav': { 
+    main: 'sidenav.umd.js', 
     defaultExtension: 'js', 
     format: 'cjs' 
   }
@@ -78,6 +93,8 @@ const barrels: string[] = [
   'app/about',
   'app/profile',
   'app/todo',
+  'app/order',
+  'app/points',
   /** @cli-barrel */
 ];
 

@@ -1,6 +1,7 @@
 {
   "rules": {
     "class-name": true,
+    "experimentalDecorators": true, 
     "curly": true,
     "eofline": false,
     "forin": true,

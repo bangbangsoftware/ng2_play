@@ -1,0 +1,60 @@
+<div class="form">
+    <md-card>
+        <md-card-content>
+            <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+                <div>
+                    <md-input class="title-input" required placeholder="Story Title" [formControl]="newTitle" md-autofocus></md-input>
+                </div>
+                <div>
+                    <md-input class="desc-input" required placeholder="Story Description" [formControl]="newDescription"></md-input>
+                </div>
+                <md-label>Acceptance Criteria <span *ngIf="needAcs">This story need acceptance criteria</span>
+                </md-label>
+                <div>
+                    <div *ngFor="let ac of acs; let i=index">{{i+1}}. {{ac}}
+                        <button type="button" (click)="removeCriteria(i)" md-mini-fab>
+                            <md-icon class="md-24">-</md-icon>
+                        </button>
+                    </div>
+                    <div>
+                            <md-input #acceptance md-autofocus="true" id="newAC" (keydown)="tab($event, focusable)" class="ac-input" (change)="checkAC()" placeholder="Acceptance Criteria" [formControl]="newAC">
+                        </md-input>
+                        <button type="button" (click)="addCriteria(newAc)" md-mini-fab><i class="material-icons" md-24>add</i></button>
+                    </div>
+                </div>
+                <md-card-actions align="end">
+                    <button type="button" md-raised-button color="primary" (click)="clearStory()" >Clear Story</button>
+                    <button md-raised-button color="primary" type="submit" [disabled]="!myForm.valid || (acs.length === 0 && newAC.value.length === 0)">Add Story</button>
+                </md-card-actions>
+            </form>
+        </md-card-content>
+    </md-card>
+</div>
+
+<div class="card-container">
+    <md-card *ngFor="let story of session.stories; let c=index">
+        <md-card-title>{{c+1}}. {{story.title}}</md-card-title>
+        <div>
+            {{story.description}}
+        </div>
+        <br>
+        <md-card-content *ngFor="let ac of story.acs; let i=index">
+            <i>{{i+1}}. {{ac}}</i> 
+        </md-card-content>
+        <md-card-actions align="end">
+            <button md-button (click)="editStory(story)" color="primary">EDIT</button>
+            <button md-button (click)="removeStory(story)" color="primary">DELETE</button>
+        </md-card-actions>
+    </md-card>
+</div>
+
+<!--<div *ngIf="!myForm.valid && myForm.dirty">Form is invalid</div>
+<div *ngIf="!newStory.valid && newStory.dirty">newStory is invalid</div>
+
+<md-progress-circle mode="determinate" value="79"></md-progress-circle>
+<md-progress-circle mode="indeterminate"></md-progress-circle>
+<md-spinner></md-spinner>
+
+<md-progress-circle mode="indeterminate" color="primary"></md-progress-circle>
+<md-progress-circle mode="indeterminate" color="accent"></md-progress-circle>
+<md-progress-circle mode="indeterminate" color="warn"></md-progress-circle>-->

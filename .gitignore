@@ -1,3 +1,4 @@
+*.swp
 dist/
 tmp/
 node_modules/

@@ -18,7 +18,7 @@ import { RouterModule } from '@angular/router';
 
 import { MaterialModule } from './material.module'
 
-import { Todo } from './todo';
+import { Story } from './story/story';
 import { About } from './about';
 import { Profile } from './profile';
 
@@ -29,7 +29,7 @@ if (environment.production) {
 @NgModule({
     declarations: [
       AppComponent,
-      Todo,
+      Story,
       About,
       Profile
     ],

@@ -1,20 +1,62 @@
-<md-toolbar>
-  <i class="material-icons demo-toolbar-icon">menu</i>
-  <span>ng2 play</span> &nbsp;
-  <div>
-    <a [routerLink]="['/']">Todo</a> |
-    <a [routerLink]="['/about', 'Hello world']">About</a>
-  </div>
+<md-sidenav-layout fullscreen>
 
-  <span class="demo-fill-remaining"></span>
-
+    <md-sidenav #sidenav (open)="createbut.focus()" >
+        <md-nav-list >
+            <button md-button #createbut (click)="create(sidenav)" >
+                <div class="md-list-item">
+                         <md-icon md-list-icon="" class="material-icons" aria-label="assignment ind">assignment ind</md-icon> 
+                    <div class="md-list-text">
+                        <span md-line>Create Stories</span>
+                    </div>
+                </div>
+            </button>
+             <button md-button (click)="order(sidenav)" md-list-item class="md-1-line">
+                <div class="md-list-item">
+                         <md-icon md-list-icon="" role="img" class="material-icons" aria-label="assignment ind">assignment ind</md-icon>
+                    <div class="md-list-text">
+                        <span md-line>Order Stories</span>
+                    </div>
+                </div>
+            </button>
+             <button md-button (click)="points(sidenav)" md-list-item="" role="listitem" class="md-1-line">
+                <div class="md-list-item">
+                         <md-icon md-list-icon class="material-icons" aria-label="assignment ind">assignment ind</md-icon> 
+                    <div class="md-list-text">
+                        <span md-line>Story Points</span>
+                    </div>
+                </div>
+            </button>
+        </md-nav-list>
+    </md-sidenav>
+    <!--
+    <md-sidenav #sidenav>
+        <md-nav-list>
+            <md-button class="side-menu">
+                <span md-line> Stories</span>
+                <div md-line class="secondary">Intital creation of stories</div>
+            </md-button>
+            <a [routerLink]="['/about', 'Hello world']" md-list-item>
+                <md-icon md-list-icon></md-icon>
+                <span md-line>About</span>
+            </a>
+        </md-nav-list>
+    </md-sidenav>
+    -->
+    <md-toolbar>
+        <i (click)="sidenav.open()" class="material-icons demo-toolbar-icon">menu</i>
+        <span>{{title}}</span> &nbsp;
+        <span class="demo-fill-remaining"></span>
+        <!--
   <div>
     <a *ngIf="loggedIn()" [routerLink]="['/profile']">Profile</a>&nbsp;
     <a href="#" *ngIf="!loggedIn()" (click)="login()">Login</a>
     <a href="#" *ngIf="loggedIn()" (click)="logout()">Logout</a>
   </div>  
-</md-toolbar>
+  -->
+    </md-toolbar>
 
-<div class="container">
-  <router-outlet></router-outlet>
-</div>
+    <div class="container">
+        <router-outlet></router-outlet>
+    </div>
+
+</md-sidenav-layout>

@@ -15,3 +15,34 @@
   padding: 6px;
   flex: 1 1 auto;
 }
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.secondary {
+  color: rgba(0,0,0,0.54);
+}
+
+[md-fab] {
+  position: absolute;
+  right: 3%;
+  top: 34px;
+  z-index: 1;
+}
+
+md-sidenav-layout {
+  background: rgba(0,0,0,0.03);
+}
+
+md-sidenav {
+  width: 200px;
+}
+
+.side-menu {
+  margin: 8px 0;
+  width: 100%;
+}
+
+
