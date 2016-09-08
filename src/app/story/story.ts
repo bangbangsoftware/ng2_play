@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { StoryItem } from '../shared';
 import { SessionService } from '../session.service';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'story',
@@ -19,10 +21,18 @@ export class Story implements OnInit {
     newAC: FormControl;
     acs: Array < string > ;
     needAcs: boolean;
+    storyID: number;
+    back:string;
+    ac;
 
-    constructor(fb: FormBuilder, private session: SessionService) {
+    constructor(fb: FormBuilder, private session: SessionService,private route: ActivatedRoute, private router: Router) {
         this.fb = fb;
         this.session.add(new StoryItem('Write a story', 'Should be able to input a story', -1, ["Should be able to do list of acceptance criteria"]));
+        this.session.add(new StoryItem('Order a story', 'Should be able to move a story up and down the backlog', -1, ["This backlog should keep its order"]));
+        this.session.add(new StoryItem('Assign Points', 'Should be able to assign points to a story', -1, ["Story should keep their points"]));
+        this.session.add(new StoryItem('Write tasks', 'Should be able to add sub tasks to a story', -1, ["The sub tasks should be associated with the story"]));
+        this.session.add(new StoryItem('Create team', 'Should be able to enter team members', -1, ["a team member should have a role - dev,po or scrum master"]));
+        this.session.add(new StoryItem('Write defintion of done', 'Should be able to enter dod', -1, ["This be broken down for the lifecycle of a feature"]));
 
         this.newTitle = new FormControl('', Validators.required);
         this.newDescription = new FormControl('', Validators.required);
@@ -33,10 +43,20 @@ export class Story implements OnInit {
             'newTitle': this.newTitle,
             'newDescription': this.newDescription
         });
+
     }
 
     ngOnInit(): void {
-        console.log('story component woke');
+        console.log('story component woke....');
+        this.storyID = this.route.snapshot.params['storyID'];
+        this.back = this.route.snapshot.params['back'];
+         if (this.storyID){
+             this.editStory(this.session.getStories()[this.storyID]);       
+        }
+    }
+
+    buttonFocus(){
+        this.ac.focus();
     }
 
     removeStory(item: StoryItem) {
@@ -52,7 +72,6 @@ export class Story implements OnInit {
     }
 
     clearStory() {
-        //    this.newAC = new FormControl("");
         this.myForm.reset();
         this.acs = [];
         this.needAcs = false;
@@ -65,6 +84,9 @@ export class Story implements OnInit {
         } else if (this.myForm.valid) {
             this.session.add(new StoryItem(this.newTitle.value, this.newDescription.value, -1, this.acs));
             this.clearStory();
+            if (this.back){
+                this.router.navigate([this.back]);
+            }
         }
     }
 
@@ -81,19 +103,14 @@ export class Story implements OnInit {
     addCriteria(): void {
         if (this.newAC.value) {
             this.acs.push(this.newAC.value);
-            this.newAC = new FormControl("");
+            this.newAC.reset();
         }
     }
-
+    
     tab(e) {
         if (e.keyCode == 9) { // press tab 
-            //el.focus();
             this.addCriteria();    
-            var ul = e.target.parentNode;
-            console.log(ul);
-            ul.focus();
-            console.log(ul);
-            //ul.lastChild.querySelector('acceptance').focus();
+            this.ac = e.target.parentNode.firstElementChild;
         }
     }
 

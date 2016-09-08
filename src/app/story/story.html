@@ -3,12 +3,12 @@
         <md-card-content>
             <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
                 <div>
-                    <md-input class="title-input" required placeholder="Story Title" [formControl]="newTitle" md-autofocus></md-input>
+                    <md-input #title autofocus class="title-input" required placeholder="Story Title" [formControl]="newTitle" tabindex="0"></md-input>
                 </div>
                 <div>
                     <md-input class="desc-input" required placeholder="Story Description" [formControl]="newDescription"></md-input>
                 </div>
-                <md-label>Acceptance Criteria <span *ngIf="needAcs">This story need acceptance criteria</span>
+                <md-label *ngIf="acs.length > 0">Acceptance Criteria <span *ngIf="needAcs">This story need acceptance criteria</span>
                 </md-label>
                 <div>
                     <div *ngFor="let ac of acs; let i=index">{{i+1}}. {{ac}}
@@ -17,9 +17,9 @@
                         </button>
                     </div>
                     <div>
-                            <md-input #acceptance md-autofocus="true" id="newAC" (keydown)="tab($event, focusable)" class="ac-input" (change)="checkAC()" placeholder="Acceptance Criteria" [formControl]="newAC">
+                            <md-input #acceptance autofocus id="newAC" (keydown)="tab($event)" class="ac-input" (change)="checkAC()" placeholder="Acceptance Criteria" [formControl]="newAC">
                         </md-input>
-                        <button type="button" (click)="addCriteria(newAc)" md-mini-fab><i class="material-icons" md-24>add</i></button>
+                        <button type="button" (focus)="buttonFocus()" (click)="addCriteria(newAc)" md-mini-fab><i class="material-icons" md-24>add</i></button>
                     </div>
                 </div>
                 <md-card-actions align="end">

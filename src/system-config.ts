@@ -57,8 +57,13 @@ const packages: any = {
     defaultExtension: 'js', 
     format: 'cjs' 
    },
-   '@angular2-material/button-toggle': { 
+    '@angular2-material/button-toggle': { 
     main: 'button-toggle.umd.js', 
+    defaultExtension: 'js', 
+    format: 'cjs' 
+   },
+   '@angular2-material/grid-list': { 
+    main: 'grid-list.umd.js', 
     defaultExtension: 'js', 
     format: 'cjs' 
    },

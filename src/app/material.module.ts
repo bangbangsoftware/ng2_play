@@ -10,6 +10,7 @@ import { MdToolbarModule } from '@angular2-material/toolbar';
 import { MdSidenavModule } from '@angular2-material/sidenav';
 import { MdListModule } from '@angular2-material/list';
 import { MdButtonToggleModule } from '@angular2-material/button-toggle';
+import { MdGridListModule  } from '@angular2-material/grid-list';
 
 @NgModule({     
     exports:      [
@@ -22,7 +23,8 @@ import { MdButtonToggleModule } from '@angular2-material/button-toggle';
       MdToolbarModule,
       MdSidenavModule,
       MdListModule,
-      MdButtonToggleModule
+      MdButtonToggleModule,
+      MdGridListModule
     ]
 })
 export class MaterialModule {

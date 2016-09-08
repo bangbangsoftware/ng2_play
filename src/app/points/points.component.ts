@@ -4,6 +4,7 @@ import { SessionService } from '../session.service';
 import { FORM_DIRECTIVES } from '@angular/forms'; 
 
 import { MdUniqueSelectionDispatcher } from '@angular2-material/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-points',
@@ -14,8 +15,9 @@ import { MdUniqueSelectionDispatcher } from '@angular2-material/core';
 export class PointsComponent implements OnInit {
   session:SessionService;
   storyPoints: number;
+  listTasks: boolean =  false;
 
-  constructor(session:SessionService) { 
+  constructor(session:SessionService, private router: Router) { 
      this.session = session;     
   }
 
@@ -26,5 +28,18 @@ export class PointsComponent implements OnInit {
     console.log(sp);
     console.log("I DRANK TOO MUCH!!!!");
   }
+
+  edit(i){
+    this.router.navigate(['story/',i,'points']);
+  }
+
+  moveUp(i){
+    this.session.moveUp(i);
+  }
+
+  moveDown(i){
+    this.session.moveDown(i);
+  }
+
 
 }

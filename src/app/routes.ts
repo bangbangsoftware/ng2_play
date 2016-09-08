@@ -9,7 +9,8 @@ import { PointsComponent } from './points/points.component';
 import { AuthGuard} from './';
 
 export const appRoutes: RouterConfig = [
-	{ path: '', component: Story },
+	{ path: 'story/:storyID/:back', component: Story },
+	{ path: 'story', component: Story },
 	{ path: 'about/:id', component: About },
     { path: 'profile', component: Profile, canActivate:[AuthGuard]},
 	{ path: 'order', component: OrderComponent },
