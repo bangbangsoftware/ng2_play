@@ -100,6 +100,7 @@ const barrels: string[] = [
   'app/todo',
   'app/order',
   'app/points',
+  'app/team',
   /** @cli-barrel */
 ];
 

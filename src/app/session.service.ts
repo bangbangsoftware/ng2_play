@@ -1,11 +1,13 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
-import { StoryItem } from './shared';
+import { StoryItem, Member } from './shared';
 
 @Injectable()
 export class SessionService {
 
     titleChangeEvent: EventEmitter < string > = new EventEmitter < string > (true);
-    private stories: Array < StoryItem > = new Array < StoryItem > ();
+    stories: Array < StoryItem > = new Array < StoryItem > ();
+    team: Array < Member > = new Array < Member > ();
+
     removeStory(item: StoryItem) {
         this.stories.splice(this.stories.indexOf(item), 1);
     }

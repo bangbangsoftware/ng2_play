@@ -15,18 +15,18 @@ import { Router } from '@angular/router';
 export class PointsComponent implements OnInit {
   session:SessionService;
   storyPoints: number;
-  listTasks: boolean =  false;
+  listTasks: Array<boolean>; 
 
   constructor(session:SessionService, private router: Router) { 
      this.session = session;     
+     this.listTasks = Array<boolean>(this.session.stories.length);
   }
 
   ngOnInit() {
   }
 
-  showTasks(sp){
-    console.log(sp);
-    console.log("I DRANK TOO MUCH!!!!");
+  showTasks(i,e){
+     this.listTasks[i] = true;     
   }
 
   edit(i){

@@ -1,13 +1,15 @@
 <div class="form">
     <md-card>
-        <md-card-content>
-            <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+            <md-card-content > 
+            <form [formGroup]="storyForm" (ngSubmit)="onSubmit()">
                 <div>
-                    <md-input #title autofocus class="title-input" required placeholder="Story Title" [formControl]="newTitle" tabindex="0"></md-input>
+                    <md-input #title autofocus class="title-input" required placeholder="Story Title"
+                    [formControl]="newTitle" tabindex="0"></md-input>
                 </div>
                 <div>
                     <md-input class="desc-input" required placeholder="Story Description" [formControl]="newDescription"></md-input>
                 </div>
+
                 <md-label *ngIf="acs.length > 0">Acceptance Criteria <span *ngIf="needAcs">This story need acceptance criteria</span>
                 </md-label>
                 <div>
@@ -17,14 +19,24 @@
                         </button>
                     </div>
                     <div>
-                            <md-input #acceptance autofocus id="newAC" (keydown)="tab($event)" class="ac-input" (change)="checkAC()" placeholder="Acceptance Criteria" [formControl]="newAC">
+                        <md-input #acceptance id="newAC" (keydown)="tab($event)" class="ac-input" (change)="checkAC()"
+                        placeholder="Acceptance Criteria" [formControl]="newAC">
                         </md-input>
-                        <button type="button" (focus)="buttonFocus()" (click)="addCriteria(newAc)" md-mini-fab><i class="material-icons" md-24>add</i></button>
+                        <button type="button" (focus)="buttonFocus()" (click)="addCriteria(newAc)" md-mini-fab><i class="material-icons" md-24>add</i>
+                        </button>
                     </div>
                 </div>
+                <br>
+                 <div class="grid">
+                    <md-grid-list cols="8" rowHeight="25px" gutterSize="8px">
+                        <md-grid-tile *ngFor="let colour of colours; let c=index" (click)="selectColour(c)"
+                        [ngClass]="{'selected': c===selectedColour,'unselected': c!==selectedColour}" class="{{coloursClass[c]}}">{{colour}}</md-grid-tile>
+                    </md-grid-list>
+                </div>
+                <br>
                 <md-card-actions align="end">
-                    <button type="button" md-raised-button color="primary" (click)="clearStory()" >Clear Story</button>
-                    <button md-raised-button color="primary" type="submit" [disabled]="!myForm.valid || (acs.length === 0 && newAC.value.length === 0)">Add Story</button>
+                    <button type="button" md-raised-button color="primary" (click)="clearStory()">Clear Story</button>
+                    <button md-raised-button color="primary" type="submit" [disabled]="!storyForm.valid || (acs.length === 0 && newAC.value.length === 0)">Add Story</button>
                 </md-card-actions>
             </form>
         </md-card-content>
@@ -32,8 +44,8 @@
 </div>
 
 <div class="card-container">
-    <md-card *ngFor="let story of session.stories; let c=index">
-        <md-card-title>{{c+1}}. {{story.title}}</md-card-title>
+    <md-card class="{{story.colour}}" *ngFor="let story of session.stories.slice().reverse(); let c=index">
+        <md-card-title>{{session.stories.length-c}}. {{story.title}}</md-card-title>
         <div>
             {{story.description}}
         </div>

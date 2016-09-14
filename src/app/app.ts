@@ -74,7 +74,8 @@ export class AppComponent {
 
     titles = {
         '/points': "Story Points",
-        '/order': "Putting the stories in order"
+        '/order': "Putting the stories in order",
+        '/team': "Define the team"
     };
 
     determineTitle(where) {
@@ -84,6 +85,10 @@ export class AppComponent {
         }
 
         return "Story Creation";
+    }
+
+    team(sidenav) {
+       this.closeAndGo(sidenav,'/team');    
     }
 
     create(sidenav) {
