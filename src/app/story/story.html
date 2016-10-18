@@ -5,13 +5,16 @@
                 <div>
                     <md-input #title autofocus class="title-input" required placeholder="Story Title"
                     [formControl]="newTitle" tabindex="0"></md-input>
+                    What type - feature, technical debt, missing, 
                 </div>
-                <div>
-                    <md-input class="desc-input" required placeholder="Story Description" [formControl]="newDescription"></md-input>
+                <div>Story Description
+                    <md-input class="desc-input" required placeholder="As" [formControl]="newDescriptionAs"></md-input>
+                    <md-input class="desc-input" required placeholder="I want" [formControl]="newDescriptionWant"></md-input>
+                    <md-input class="desc-input" required placeholder="so that" [formControl]="newDescriptionThat"></md-input>
                 </div>
-
-                <md-label *ngIf="acs.length > 0">Acceptance Criteria <span *ngIf="needAcs">This story need acceptance criteria</span>
-                </md-label>
+                
+                <label *ngIf="arcs && acs.length > 0">Acceptance Criteria <span *ngIf="needAcs">This story need acceptance criteria</span>
+                </label>
                 <div>
                     <div *ngFor="let ac of acs; let i=index">{{i+1}}. {{ac}}
                         <button type="button" (click)="removeCriteria(i)" md-mini-fab>
@@ -44,10 +47,12 @@
 </div>
 
 <div class="card-container">
-    <md-card class="{{story.colour}}" *ngFor="let story of session.stories.slice().reverse(); let c=index">
+    <md-card (click)="editStory(story)" class="{{story.colour}}" *ngFor="let story of session.stories.slice().reverse(); let c=index">
         <md-card-title>{{session.stories.length-c}}. {{story.title}}</md-card-title>
         <div>
-            {{story.description}}
+            As {{story.descriptionAs}}, I want
+            {{story.descriptionWant}}, so that
+            {{story.descriptionThat}}
         </div>
         <br>
         <md-card-content *ngFor="let ac of story.acs; let i=index">
@@ -56,6 +61,7 @@
         <md-card-actions align="end">
             <button md-button (click)="editStory(story)" color="primary">EDIT</button>
             <button md-button (click)="removeStory(story)" color="primary">DELETE</button>
+            <button md-button (click)="breakStory(story)" color="primary">BREAK DOWN</button>
         </md-card-actions>
     </md-card>
 </div>

@@ -3,7 +3,7 @@ export class Task {
 }
 
 export class StoryItem {
-    constructor(public title: string, public colour:string, public description: string, public points: number, public acs: Array < string > , public tasks: Array < Task > ) {}
+    constructor(public title: string, public colour:string,  public descriptionAs: string, public descriptionWant: string, public descriptionThat: string, public points: number, public acs: Array < string > , public tasks: Array < Task > ) {}
 }
 
 export class Member {

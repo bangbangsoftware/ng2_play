@@ -4,20 +4,21 @@ import { StoryItem } from '../shared';
 import { SessionService } from '../session.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-import { ReversePipe} from '../reverse.pipe'; 
 
 @Component({
     selector: 'story',
     viewProviders: [FormBuilder],
-    templateUrl: './app/story/story.html',
-    styleUrls: ['./app/story/story.css'],
+    templateUrl: 'story.html',
+    styleUrls: ['story.css'],
 })
 export class Story implements OnInit {
 
     fb: FormBuilder;
     storyForm: FormGroup;
     newTitle: FormControl;
-    newDescription: FormControl;
+    newDescriptionAs: FormControl;
+    newDescriptionWant: FormControl;
+    newDescriptionThat: FormControl;
     newColour: FormControl;
     newAC: FormControl;
     acs: Array < string > ;
@@ -31,22 +32,26 @@ export class Story implements OnInit {
 
     constructor(fb: FormBuilder, private session: SessionService, private route: ActivatedRoute, private router: Router) {
         this.fb = fb;
-        this.session.add(new StoryItem('Write a story', 'yellow', 'Should be able to input a story', -1, ["Should be able to do list of acceptance criteria"], []));
-        this.session.add(new StoryItem('Order a story', 'yellow', 'Should be able to move a story up and down the backlog', -1, ["This backlog should keep its order"], []));
-        this.session.add(new StoryItem('Assign Points', 'yellow', 'Should be able to assign points to a story', -1, ["Story should keep their points"], []));
-        this.session.add(new StoryItem('Write tasks', 'yellow', 'Should be able to add sub tasks to a story', -1, ["The sub tasks should be associated with the story"], []));
-        this.session.add(new StoryItem('Create team', 'yellow', 'Should be able to enter team members', -1, ["a team member should have a role - dev,po or scrum master"], []));
-        this.session.add(new StoryItem('Write defintion of done', 'yellow', 'Should be able to enter dod', -1, ["This be broken down for the lifecycle of a feature"], []));
+        this.session.addStory(new StoryItem('Write a story', 'yellow', 'a po', 'to be able to input a story','the project can get features', -1, ["Should be able to do list of acceptance criteria"], []));
+        this.session.addStory(new StoryItem('Order a story', 'yellow', 'a po','to be able to move a story up and down the backlog', 'features are in correct order', -1, ["This backlog should keep its order"], []));
+        this.session.addStory(new StoryItem('Assign Points', 'yellow', 'the team','to be able to assign points to a story','velocity can be estimated', -1, ["Story should keep their points"], []));
+        this.session.addStory(new StoryItem('Write tasks', 'yellow', 'a scrum master', 'to be able to add sub tasks to a story', 'sprints can be planned', -1, ["The sub tasks should be associated with the story"], []));
+        this.session.addStory(new StoryItem('Create team', 'yellow', 'the team','to be able to enter team members', 'members are up to date', -1, ["a team member should have a role - dev,po or scrum master"], []));
+        this.session.addStory(new StoryItem('Write defintion of done', 'yellow', 'the team','to be able to enter dod', 'we can have confidence the story has now fully shipable artifacts', -1, ["This be broken down for the lifecycle of a feature"], []));
 
         this.newTitle = new FormControl('', Validators.required);
-        this.newDescription = new FormControl('', Validators.required);
+        this.newDescriptionAs = new FormControl('', Validators.required);
+        this.newDescriptionWant = new FormControl('', Validators.required);
+        this.newDescriptionThat = new FormControl('', Validators.required);
         this.newColour = new FormControl('white');
         this.acs = [];
         this.newAC = new FormControl("");
         this.needAcs = false;
         this.storyForm = this.fb.group({
             'newTitle': this.newTitle,
-            'newDescription': this.newDescription,
+            'newDescriptionAs': this.newDescriptionAs,
+            'newDescriptionWant': this.newDescriptionWant,
+            'newDescriptionThat': this.newDescriptionThat,
             'newColour': this.newColour
         });
 
@@ -64,7 +69,7 @@ export class Story implements OnInit {
 
     selectColour(c) {
         this.selectedColour = c;
-        this.newColour.updateValue(this.coloursClass[c]); 
+        this.newColour.setValue(this.coloursClass[c]);
     }
 
     buttonFocus() {
@@ -76,11 +81,13 @@ export class Story implements OnInit {
     }
 
     editStory(item: StoryItem) {
-        this.newTitle.updateValue(item.title);
-        this.newDescription.updateValue(item.description);
-        this.newColour.updateValue(item.colour);
+        this.newTitle.setValue(item.title);
+        this.newDescriptionAs.setValue(item.descriptionAs);
+        this.newDescriptionWant.setValue(item.descriptionWant);
+        this.newDescriptionThat.setValue(item.descriptionThat);
+        this.newColour.setValue(item.colour);
         this.selectedColour = this.colours.indexOf(item.colour);
-        this.newAC.updateValue("");
+        this.newAC.setValue("");
         this.acs = item.acs;
         this.needAcs = false;
     }
@@ -96,7 +103,7 @@ export class Story implements OnInit {
         if (this.acs.length === 0) {
             this.needAcs = true;
         } else if (this.storyForm.valid) {
-            this.session.add(new StoryItem(this.newTitle.value, this.newColour.value, this.newDescription.value, -1, this.acs, []));
+            this.session.addStory(new StoryItem(this.newTitle.value, this.newColour.value, this.newDescriptionAs.value, this.newDescriptionWant.value, this.newDescriptionThat.value, -1, this.acs, []));
             this.clearStory();
             if (this.back) {
                 this.router.navigate([this.back]);

@@ -3,8 +3,8 @@ import { SessionService } from '../session.service';
 
 @Component({
   selector: 'order',
-  templateUrl: './app/order/order.component.html',
-  styleUrls: ['./app/order/order.component.css'],
+  templateUrl: 'order.component.html',
+  styleUrls: ['order.component.css'],
 
 })
 export class OrderComponent implements OnInit {

@@ -8,8 +8,8 @@ declare var Auth0Lock;
 
 @Component({
     selector: 'app-root',
-    templateUrl: './app/app.html',
-    styleUrls: ['./app/app.css'],
+    templateUrl: 'app.html',
+    styleUrls: ['app.css'],
     providers: [SessionService]
 })
 export class AppComponent {
@@ -65,7 +65,7 @@ export class AppComponent {
     }
 
     loggedIn() {
-        return tokenNotExpired();
+//        return tokenNotExpired();
     }
 
     isActive(path) {

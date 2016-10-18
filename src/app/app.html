@@ -1,6 +1,6 @@
 <md-sidenav-layout fullscreen>
 
-    <md-sidenav #sidenav (open)="createbut.focus()" >
+    <md-sidenav class="primary" #sidenav (open)="createbut.focus()" >
         <md-nav-list >
               <button md-button #teambut (click)="team(sidenav)" >
                 <div class="md-list-item">
@@ -27,28 +27,28 @@
              <button md-button #backlog (click)="points(sidenav)" md-list-item="" role="listitem" class="md-1-line">
                 <div class="md-list-item">
                     <div class="md-list-text">
-                        <span md-line>4. Backlog Refinement</span>
+                        <span class="meeting" md-line>4. Backlog Refinement</span>
                     </div>
                 </div>
             </button>
                 <button md-button #sprintbut (click)="create(sidenav)" >
                 <div class="md-list-item">
                     <div class="md-list-text">
-                        <span md-line>5. Sprint Planning</span>
+                        <span class="meeting" md-line>5. Sprint Planning</span>
                     </div>
                 </div>
             </button>
                  <button md-button #retrobut (click)="create(sidenav)" >
                 <div class="md-list-item">
                     <div class="md-list-text">
-                        <span md-line>6. Sprint retrospective</span>
+                        <span class="meeting" md-line>6. Sprint retrospective</span>
                     </div>
                 </div>
             </button>
                   <button md-button #standupbut (click)="create(sidenav)" >
                 <div class="md-list-item">
                     <div class="md-list-text">
-                        <span md-line>Stand up</span>
+                        <span class="meeting" md-line>Stand up</span>
                     </div>
                 </div>
             </button>
@@ -56,6 +56,13 @@
                 <div class="md-list-item">
                     <div class="md-list-text">
                         <span md-line>Release Planning</span>
+                    </div>
+                </div>
+            </button>
+                <button md-button #burndownbut (click)="create(sidenav)" >
+                <div class="md-list-item">
+                    <div class="md-list-text">
+                        <span md-line>Burn down</span>
                     </div>
                 </div>
             </button>
@@ -75,8 +82,8 @@
         </md-nav-list>
     </md-sidenav>
     -->
-    <md-toolbar>
-        <i (click)="sidenav.open()" class="material-icons demo-toolbar-icon">menu</i>
+    <md-toolbar color="primary">
+        <md-icon (click)="sidenav.open()" >menu</md-icon>
         <span>{{title}}</span> &nbsp;
         <span class="demo-fill-remaining"></span>
         <!--

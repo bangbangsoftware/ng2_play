@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders  }       from '@angular/core';
+import { NgModule, ModuleWithProviders  } from '@angular/core';
 
 import { MdButtonModule } from '@angular2-material/button';
 import { MdCardModule } from '@angular2-material/card';
@@ -11,6 +11,7 @@ import { MdSidenavModule } from '@angular2-material/sidenav';
 import { MdListModule } from '@angular2-material/list';
 import { MdButtonToggleModule } from '@angular2-material/button-toggle';
 import { MdGridListModule  } from '@angular2-material/grid-list';
+import { MdIconModule  } from '@angular2-material/icon';
 
 @NgModule({     
     exports:      [
@@ -24,7 +25,8 @@ import { MdGridListModule  } from '@angular2-material/grid-list';
       MdSidenavModule,
       MdListModule,
       MdButtonToggleModule,
-      MdGridListModule
+      MdGridListModule,
+      MdIconModule
     ]
 })
 export class MaterialModule {
