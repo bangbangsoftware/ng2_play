@@ -1,9 +1,9 @@
 import { BrowserModule  } from '@angular/platform-browser';
 import { NgModule }       from '@angular/core';
-import { AppComponent }   from './app.component';
+import { AppComponent }   from './app';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { environment} from './';
-import { routing, appRoutingProviders } from './routes.ts';
+import { routing, appRoutingProviders } from './routes';
 
 import { enableProdMode } from '@angular/core';
 //import { bind, provide } from '@angular/core';

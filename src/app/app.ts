@@ -4,7 +4,7 @@ import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { Router } from '@angular/router';
 import { SessionService } from './session.service';
 
-declare var Auth0Lock;
+//declare var Auth0Lock;
 
 @Component({
     selector: 'app-root',
@@ -14,7 +14,7 @@ declare var Auth0Lock;
 })
 export class AppComponent {
     //    lock = new Auth0Lock('T1wdQrDposGW5BisaKViC0Cu9CuxtR0c', 'towfeek.eu.auth0.com');
-    lock = new Auth0Lock('jBd29779Oe3mrUOEugibMfAfGDnU6qIG', 'tardi.auth0.com');
+//    lock = new Auth0Lock('jBd29779Oe3mrUOEugibMfAfGDnU6qIG', 'tardi.auth0.com');
     jwtHelper: JwtHelper = new JwtHelper();
     location: Location;
     ngZone: NgZone;
@@ -39,6 +39,7 @@ export class AppComponent {
 
     login() {
         var self = this;
+/*        
         this.lock.show((err: string, profile: string, id_token: string) => {
             if (err) {
                 throw new Error(err);
@@ -55,6 +56,7 @@ export class AppComponent {
 
             this.ngZone.run(() => self.loggedIn());
         });
+*/       
     }
 
     logout() {
