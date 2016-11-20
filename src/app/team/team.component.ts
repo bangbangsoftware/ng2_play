@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { SessionService } from '../session.service';
-import { Role, Member } from '../shared';
+import { Role, Member, Skill } from '../shared';
 
 @Component({
   selector: 'app-team',
@@ -57,7 +57,8 @@ export class TeamComponent implements OnInit {
       const name = this.newName.value;
       const role = this.roleMap[this.newRole];    
       const email = this.newEmail.value;
-      this.session.team.push(new Member(name,role,email));
+      const skills = Array<Skill>();
+      this.session.team.push(new Member(name,role,email,skills));
       this.newName.setValue("");
       this.newEmail.setValue("");
       this.newRole = "";
