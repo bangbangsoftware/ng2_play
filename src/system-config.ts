@@ -8,7 +8,7 @@
 /** Map relative paths to URLs. */
 const map: any = {
   '@angular2-material': 'vendor/@angular2-material',
-  'angular2-jwt': 'vendor/angular2-jwt'  
+  'angular2-jwt': 'vendor/angular2-jwt'
 };
 
 /** User packages configuration. */

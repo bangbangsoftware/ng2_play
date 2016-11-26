@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { Router } from '@angular/router';
 import { SessionService } from './session.service';
+import * as Gun from '../../node_modules/gun/gun.js';
 
 //declare var Auth0Lock;
 
@@ -30,6 +31,8 @@ export class AppComponent {
         console.log(what);
         const where = this.location.path();
         this.title = this.determineTitle(where);
+        var gun = Gun('https://gunjs.herokuapp.com/gun');
+        gun.put({hello: "world"}).key('random/PBH6KVT0H');
     }
 
     titleChanged(title) {

@@ -1,2 +1,3 @@
 
 import 'hammerjs';
+import 'gun';
