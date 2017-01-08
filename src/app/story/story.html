@@ -56,7 +56,7 @@
         </div>
         <br>
         <md-card-content *ngFor="let ac of story.acs; let i=index">
-            <i>{{i+1}}. {{ac}}</i> 
+            <i>{{i+1}}. {{ac.name}}</i> 
         </md-card-content>
         <md-card-actions align="end">
             <button md-button (click)="editStory(story)" color="primary">EDIT</button>

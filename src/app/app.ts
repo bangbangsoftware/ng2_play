@@ -3,7 +3,8 @@ import { Location } from '@angular/common';
 import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { Router } from '@angular/router';
 import { SessionService } from './session.service';
-import * as Gun from '../../node_modules/gun/gun.js';
+
+var PouchDB = require('pouchdb');
 
 //declare var Auth0Lock;
 
@@ -15,7 +16,7 @@ import * as Gun from '../../node_modules/gun/gun.js';
 })
 export class AppComponent {
     //    lock = new Auth0Lock('T1wdQrDposGW5BisaKViC0Cu9CuxtR0c', 'towfeek.eu.auth0.com');
-//    lock = new Auth0Lock('jBd29779Oe3mrUOEugibMfAfGDnU6qIG', 'tardi.auth0.com');
+    //    lock = new Auth0Lock('jBd29779Oe3mrUOEugibMfAfGDnU6qIG', 'tardi.auth0.com');
     jwtHelper: JwtHelper = new JwtHelper();
     location: Location;
     ngZone: NgZone;
@@ -31,8 +32,33 @@ export class AppComponent {
         console.log(what);
         const where = this.location.path();
         this.title = this.determineTitle(where);
-        var gun = Gun('https://gunjs.herokuapp.com/gun');
-        gun.put({hello: "world"}).key('random/PBH6KVT0H');
+        this.userID = 0;
+
+        var db = new PouchDB('tardi');
+        const opts = {live:true};
+        const remoteCoach = "http://localhost:5984/tardi";
+        const syncError = (err) => { 
+                console.log(err); 
+        }
+        db.sync(remoteCoach,opts,syncError);
+        db.get('user'+ID).then(doc => {
+            return db.put({
+                _id: 'general',
+                _rev: doc._rev,
+                title: this.title
+            });
+        }).then(response => {
+            console.log("Response:");
+            console.log(response); // handle resp    onse }).catch(err => { console.log(err); });
+
+        }).catch(err => {
+            if (err.status === 404) {
+                db.put({
+                    "_id": "general",
+                    title: this.title
+                });
+            }
+        });
     }
 
     titleChanged(title) {
@@ -42,24 +68,24 @@ export class AppComponent {
 
     login() {
         var self = this;
-/*        
-        this.lock.show((err: string, profile: string, id_token: string) => {
-            if (err) {
-                throw new Error(err);
-            }
+        /*        
+                this.lock.show((err: string, profile: string, id_token: string) => {
+                    if (err) {
+                        throw new Error(err);
+                    }
 
-            localStorage.setItem('profile', JSON.stringify(profile));
-            localStorage.setItem('id_token', id_token);
+                    localStorage.setItem('profile', JSON.stringify(profile));
+                    localStorage.setItem('id_token', id_token);
 
-            console.log(
-                this.jwtHelper.decodeToken(id_token),
-                this.jwtHelper.getTokenExpirationDate(id_token),
-                this.jwtHelper.isTokenExpired(id_token)
-            );
+                    console.log(
+                        this.jwtHelper.decodeToken(id_token),
+                        this.jwtHelper.getTokenExpirationDate(id_token),
+                        this.jwtHelper.isTokenExpired(id_token)
+                    );
 
-            this.ngZone.run(() => self.loggedIn());
-        });
-*/       
+                    this.ngZone.run(() => self.loggedIn());
+                });
+        */
     }
 
     logout() {
@@ -70,7 +96,7 @@ export class AppComponent {
     }
 
     loggedIn() {
-//        return tokenNotExpired();
+        //        return tokenNotExpired();
     }
 
     isActive(path) {
@@ -93,25 +119,25 @@ export class AppComponent {
     }
 
     team(sidenav) {
-       this.closeAndGo(sidenav,'/team');    
+        this.closeAndGo(sidenav, '/team');
     }
 
     create(sidenav) {
-       this.closeAndGo(sidenav,'/story');    
+        this.closeAndGo(sidenav, '/story');
     }
 
     order(sidenav) {
-       this.closeAndGo(sidenav,'/order');    
+        this.closeAndGo(sidenav, '/order');
     }
 
     points(sidenav) {
-       this.closeAndGo(sidenav,'/points');    
+        this.closeAndGo(sidenav, '/points');
     }
 
-    closeAndGo(sidenav,path){    
-       sidenav.close();
-       this.router.navigate([path]);
-       this.title = this.determineTitle(path);
+    closeAndGo(sidenav, path) {
+        sidenav.close();
+        this.router.navigate([path]);
+        this.title = this.determineTitle(path);
     }
 
 }
