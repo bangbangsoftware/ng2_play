@@ -58,18 +58,18 @@ export class TeamComponent implements OnInit {
       const role = this.roleMap[this.newRole];    
       const email = this.newEmail.value;
       const skills = Array<Skill>();
-      this.session.team.push(new Member(name,role,email,skills));
+      //this.session.team.push(new Member(name,role,email,skills));
       this.newName.setValue("");
       this.newEmail.setValue("");
       this.newRole = "";
   }
 
   removeMember(i) {
-      this.session.team.splice(i, 1);
+      this.session.project.team.splice(i, 1);
   }
 
   editMember(i){
-      const memb = this.session.team[i];    
+      const memb = this.session.project.team[i];    
       this.newName.setValue(memb.name);
       this.newEmail.setValue(memb.email);
       this.newRole = memb.role.name;

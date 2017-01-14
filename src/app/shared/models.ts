@@ -1,4 +1,16 @@
 // First building for a sprint, maybe needs Epic and brain storm
+
+export class Project {
+    constructor(public _id: string,
+                public name: string,
+                public description: string,
+                public stories: Array <StoryGroup>,
+                public team: Array <Member>) {} }
+
+export class StoryGroup {
+    constructor(public name: string,
+                public items: Array <StoryItem>) {} }
+
 export class StoryItem {
     constructor(public title: string,
                 public colour:string,
@@ -41,10 +53,12 @@ export class Countdown {
 
 // Users with Roles, Skills and avaliablity
 export class Member {
-    constructor(public name: string,
+    constructor(public _id: string,
+                public name: string,
                 public role: Role,
                 public email: string,
-                public skills: Array<Skill>) {} }
+                public skills: Array<Skill>,
+                public currentProjectID: number) {} }
 
 export class Role {
     constructor(public name: string) {} }
@@ -64,7 +78,8 @@ export class Deployment{ // Linked to a script to deploy somehow
     constructor(public name){} }
 
 export class Bug{
-    constructor(public tech: Tech,
+    constructor(public _id: string,
+                public tech: Tech,
                 public title: string, 
                 public description: string, 
                 public assigned: Member, 

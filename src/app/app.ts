@@ -3,6 +3,16 @@ import { Location } from '@angular/common';
 import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { Router } from '@angular/router';
 import { SessionService } from './session.service';
+import {
+    Member,
+    Role,
+    Project,
+    Skill,
+    StoryGroup,
+    StoryItem,
+    Acceptance,
+    Task
+} from './shared/models';
 
 var PouchDB = require('pouchdb');
 
@@ -22,44 +32,18 @@ export class AppComponent {
     ngZone: NgZone;
     router: Router;
     title: string = "Story Creation";
+    user: Member;
 
     constructor(location: Location, ngZone: NgZone, router: Router, private session: SessionService) {
         this.location = location;
         this.ngZone = ngZone;
         this.router = router;
-        console.log("subscribing to title change");
-        const what = session.titleChangeEvent.subscribe(title => this.titleChanged(title));
-        console.log(what);
         const where = this.location.path();
         this.title = this.determineTitle(where);
-        this.userID = 0;
+        // @TODO Test
+        this.session.login("mick","mick");
 
-        var db = new PouchDB('tardi');
-        const opts = {live:true};
-        const remoteCoach = "http://localhost:5984/tardi";
-        const syncError = (err) => { 
-                console.log(err); 
-        }
-        db.sync(remoteCoach,opts,syncError);
-        db.get('user'+ID).then(doc => {
-            return db.put({
-                _id: 'general',
-                _rev: doc._rev,
-                title: this.title
-            });
-        }).then(response => {
-            console.log("Response:");
-            console.log(response); // handle resp    onse }).catch(err => { console.log(err); });
-
-        }).catch(err => {
-            if (err.status === 404) {
-                db.put({
-                    "_id": "general",
-                    title: this.title
-                });
-            }
-        });
-    }
+   }
 
     titleChanged(title) {
         console.log("title changed to " + title);

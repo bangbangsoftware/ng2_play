@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { StoryItem, Acceptance } from '../shared';
-import { SessionService } from '../session.service';
+import { StoryItem, Acceptance,Project } from '../shared';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { SessionService } from '../session.service';
+
 
 @Component({
     selector: 'story',
@@ -13,6 +14,7 @@ import { Router } from '@angular/router';
 })
 export class Story implements OnInit {
 
+    listID: number = 0;    
     fb: FormBuilder;
     storyForm: FormGroup;
     newTitle: FormControl;
@@ -32,13 +34,6 @@ export class Story implements OnInit {
 
     constructor(fb: FormBuilder, private session: SessionService, private route: ActivatedRoute, private router: Router) {
         this.fb = fb;
-        this.session.addStory(new StoryItem('Write a story', 'yellow', 'a po', 'to be able to input a story','the project can get features', -1, [new Acceptance("Should be able to do list of acceptance criteria")], []));
-        this.session.addStory(new StoryItem('Order a story', 'yellow', 'a po','to be able to move a story up and down the backlog', 'features are in correct order', -1, [new Acceptance("This backlog should keep its order")], []));
-        this.session.addStory(new StoryItem('Assign Points', 'yellow', 'the team','to be able to assign points to a story','velocity can be estimated', -1, [new Acceptance("Story should keep their points")], []));
-        this.session.addStory(new StoryItem('Write tasks', 'yellow', 'a scrum master', 'to be able to add sub tasks to a story', 'sprints can be planned', -1, [new Acceptance("The sub tasks should be associated with the story")], []));
-        this.session.addStory(new StoryItem('Create team', 'yellow', 'the team','to be able to enter team members', 'members are up to date', -1, [new Acceptance("a team member should have a role - dev,po or scrum master")], []));
-        this.session.addStory(new StoryItem('Write defintion of done', 'yellow', 'the team','to be able to enter dod', 'we can have confidence the story has now fully shipable artifacts', -1, [new Acceptance("This be broken down for the lifecycle of a feature")], []));
-
         this.newTitle = new FormControl('', Validators.required);
         this.newDescriptionAs = new FormControl('', Validators.required);
         this.newDescriptionWant = new FormControl('', Validators.required);
@@ -62,7 +57,7 @@ export class Story implements OnInit {
         this.storyID = this.route.snapshot.params['storyID'];
         this.back = this.route.snapshot.params['back'];
         if (this.storyID) {
-            this.editStory(this.session.getStories()[this.storyID]);
+            this.editStory(this.session.project.stories[this.listID].items[this.storyID]);
         }
         this.selectedColour = -1;
     }
@@ -77,7 +72,8 @@ export class Story implements OnInit {
     }
 
     removeStory(item: StoryItem) {
-        this.session.removeStory(item);
+        const index = this.session.project.stories[this.listID].items.indexOf(item);
+        this.session.project.stories[this.listID].items.splice(index, 1);
     }
 
     editStory(item: StoryItem) {
@@ -104,7 +100,7 @@ export class Story implements OnInit {
             this.needAcs = true;
         } else if (this.storyForm.valid) {
             const acceptances = this.acs.map(a => new Acceptance(a));    
-            this.session.addStory(new StoryItem(this.newTitle.value, this.newColour.value, this.newDescriptionAs.value, this.newDescriptionWant.value, this.newDescriptionThat.value, -1, acceptances, []));
+            this.session.project.stories[this.listID].items.push(new StoryItem(this.newTitle.value, this.newColour.value, this.newDescriptionAs.value, this.newDescriptionWant.value, this.newDescriptionThat.value, -1, acceptances, []));
             this.clearStory();
             if (this.back) {
                 this.router.navigate([this.back]);

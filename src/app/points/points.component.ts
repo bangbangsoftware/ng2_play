@@ -24,7 +24,7 @@ export class PointsComponent implements OnInit {
 
   constructor(session:SessionService, private router: Router, private fb: FormBuilder){
      this.session = session;     
-     this.listTasks = Array<boolean>(this.session.stories.length);
+     this.listTasks = Array<boolean>(this.session.project.stories[0].items.length);
      this.newTaskTitle = new FormControl('', Validators.required);
      this.newTaskTime = new FormControl('', Validators.required);
         this.taskForm = this.fb.group({
@@ -62,10 +62,10 @@ export class PointsComponent implements OnInit {
   }
 
   moveUp(i){
-    this.session.moveUp(i);
+   //this.session.moveUp(i);
   }
 
   moveDown(i){
-    this.session.moveDown(i);
+   // this.session.moveDown(i);
   }
 }

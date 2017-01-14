@@ -16,7 +16,7 @@ export class OrderComponent implements OnInit {
   }
 
   ngOnInit() {
-     this.session.setTitle("Putting the stories in order");
+//     this.session.setTitle("Putting the stories in order");
   }
 
 }
