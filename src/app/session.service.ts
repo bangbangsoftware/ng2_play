@@ -1,6 +1,12 @@
-//import { Location } from '@angular/common';
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import {
+    Location
+} from '@angular/common';
+import {
+    Injectable
+} from '@angular/core';
+import {
+    Router
+} from '@angular/router';
 import {
     Member,
     Role,
@@ -23,51 +29,64 @@ export class SessionService {
     public project: Project;
     public user: Member;
     public title: string;
-//    constructor(private router: Router,  private location: Location) {
-//    constructor(private router: Router) {
-    constructor() {
+    public lastLocation: string;
+    constructor(private router: Router, private location: Location) {
         console.log("Hello from %cSession", "font-size:300%; color:orange");
     }
 
     isIn() {
-        console.log("Logged in?")    
+        console.log("Logged in?")
         if (this.projectDB) {
             return true;
         }
-//        this.router.navigate(['login']);
+        this.router.navigate(['login']);
+        this.lastLocation = this.location.path();
         return false;
     }
 
+    back() {
+        if (this.lastLocation && this.projectDB) {
+            this.router.navigate(['login']);
+        }
+    }
+
+    logout(){
+        this.projectDB = null;
+        this.project = null;
+        this.isIn();
+    }
+
     login(ua: string, pw: string) {
-        this.userDB = this.setupPouch("users", ua, pw);
         this.projectDB = this.setupPouch("waterbear", ua, pw);
         const tester = this.testingSetup();
 
-        this.userDB.get(tester.user._id + "").then(doc => {
-            this.user = doc;
-        }).catch(err => {
-            if (err.status === 404) {
-                this.userDB.put(tester.user).then(d => {
-                    console.log("New user inserted");
-                }).catch(err => console.log(err));
-            }
-        });
-        
-        this.projectDB.putUser("mick", {
-            metadata: tester.user
-        }).then(doc => {}).catch(err => console.log(err));
+//        this.userDB = this.setupPouch("users", ua, pw);
+//        this.userDB.get(tester.user._id + "").then(doc => {
+//            this.user = doc;
+//        }).catch(err => {
+//            if (err.status === 404) {
+//                this.userDB.put(tester.user).then(d => {
+//                    console.log("New user inserted");
+//                }).catch(err => console.log(err));
+//            }
+//        });
+
+//        this.projectDB.putUser("mick", {
+//            metadata: tester.user
+//        }).then(doc => {}).catch(err => console.log(err));
 
         this.projectDB.get(tester.project._id + "").then(doc => {
             this.project = doc;
+            this.back();
         }).catch(err => {
             if (err.status === 404) {
                 this.projectDB.put(tester.project).then(d => {
                     console.log("New project inserted");
+                    this.back();
                 }).catch(err => console.log(err));
 
             }
         });
-
     }
 
     titles = {
@@ -77,7 +96,7 @@ export class SessionService {
     };
     determineTitle(where = null) {
         if (!where) {
-//            where = this.location.path();
+            where = this.location.path();
         }
         const result = this.titles[where];
         if (result) {

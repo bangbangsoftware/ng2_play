@@ -10,24 +10,24 @@ import { SessionService } from './session.service';
 })
 export class AppComponent {
     title: string = "Who are you?";
-
     constructor(private router: Router, private session: SessionService) {}
 
     team(sidenav) {
         this.closeAndGo(sidenav, '/team');
     }
-
     create(sidenav) {
         this.closeAndGo(sidenav, '/story');
     }
-
     order(sidenav) {
         this.closeAndGo(sidenav, '/order');
     }
-
     points(sidenav) {
         this.closeAndGo(sidenav, '/points');
     }
+
+    logout(){
+        this.session.logout();    
+    } 
 
     closeAndGo(sidenav, path) {
         sidenav.close();
