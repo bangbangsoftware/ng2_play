@@ -1,22 +1,6 @@
-import { Component, NgZone } from '@angular/core';
-import { Location } from '@angular/common';
-import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SessionService } from './session.service';
-import {
-    Member,
-    Role,
-    Project,
-    Skill,
-    StoryGroup,
-    StoryItem,
-    Acceptance,
-    Task
-} from './shared/models';
-
-var PouchDB = require('pouchdb');
-
-//declare var Auth0Lock;
 
 @Component({
     selector: 'app-root',
@@ -25,82 +9,9 @@ var PouchDB = require('pouchdb');
     providers: [SessionService]
 })
 export class AppComponent {
-    //    lock = new Auth0Lock('T1wdQrDposGW5BisaKViC0Cu9CuxtR0c', 'towfeek.eu.auth0.com');
-    //    lock = new Auth0Lock('jBd29779Oe3mrUOEugibMfAfGDnU6qIG', 'tardi.auth0.com');
-    jwtHelper: JwtHelper = new JwtHelper();
-    location: Location;
-    ngZone: NgZone;
-    router: Router;
-    title: string = "Story Creation";
-    user: Member;
+    title: string = "Who are you?";
 
-    constructor(location: Location, ngZone: NgZone, router: Router, private session: SessionService) {
-        this.location = location;
-        this.ngZone = ngZone;
-        this.router = router;
-        const where = this.location.path();
-        this.title = this.determineTitle(where);
-        // @TODO Test
-        this.session.login("mick","mick");
-
-   }
-
-    titleChanged(title) {
-        console.log("title changed to " + title);
-        this.title = title;
-    }
-
-    login() {
-        var self = this;
-        /*        
-                this.lock.show((err: string, profile: string, id_token: string) => {
-                    if (err) {
-                        throw new Error(err);
-                    }
-
-                    localStorage.setItem('profile', JSON.stringify(profile));
-                    localStorage.setItem('id_token', id_token);
-
-                    console.log(
-                        this.jwtHelper.decodeToken(id_token),
-                        this.jwtHelper.getTokenExpirationDate(id_token),
-                        this.jwtHelper.isTokenExpired(id_token)
-                    );
-
-                    this.ngZone.run(() => self.loggedIn());
-                });
-        */
-    }
-
-    logout() {
-        localStorage.removeItem('profile');
-        localStorage.removeItem('id_token');
-
-        this.loggedIn();
-    }
-
-    loggedIn() {
-        //        return tokenNotExpired();
-    }
-
-    isActive(path) {
-        return this.location.path() === path;
-    }
-
-    titles = {
-        '/points': "Story Points",
-        '/order': "Putting the stories in order",
-        '/team': "Define the team"
-    };
-
-    determineTitle(where) {
-        const result = this.titles[where];
-        if (result) {
-            return result;
-        }
-
-        return "Story Creation";
-    }
+    constructor(private router: Router, private session: SessionService) {}
 
     team(sidenav) {
         this.closeAndGo(sidenav, '/team');
@@ -121,7 +32,6 @@ export class AppComponent {
     closeAndGo(sidenav, path) {
         sidenav.close();
         this.router.navigate([path]);
-        this.title = this.determineTitle(path);
+        this.title = this.session.determineTitle(path);
     }
-
 }

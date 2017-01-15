@@ -1,8 +1,6 @@
-import {
-    Injectable,
-    Output,
-    EventEmitter
-} from '@angular/core';
+//import { Location } from '@angular/common';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import {
     Member,
     Role,
@@ -13,6 +11,7 @@ import {
     Acceptance,
     Task
 } from './shared/models';
+
 const PouchDB = require('pouchdb');
 PouchDB.plugin(require('pouchdb-authentication'));
 
@@ -20,10 +19,23 @@ PouchDB.plugin(require('pouchdb-authentication'));
 export class SessionService {
     public userDB;
     public projectDB;
+
     public project: Project;
     public user: Member;
+    public title: string;
+//    constructor(private router: Router,  private location: Location) {
+//    constructor(private router: Router) {
     constructor() {
         console.log("Hello from %cSession", "font-size:300%; color:orange");
+    }
+
+    isIn() {
+        console.log("Logged in?")    
+        if (this.projectDB) {
+            return true;
+        }
+//        this.router.navigate(['login']);
+        return false;
     }
 
     login(ua: string, pw: string) {
@@ -40,8 +52,7 @@ export class SessionService {
                 }).catch(err => console.log(err));
             }
         });
-
-        //@Tempory
+        
         this.projectDB.putUser("mick", {
             metadata: tester.user
         }).then(doc => {}).catch(err => console.log(err));
@@ -57,6 +68,24 @@ export class SessionService {
             }
         });
 
+    }
+
+    titles = {
+        '/points': "Story Points",
+        '/order': "Putting the stories in order",
+        '/team': "Define the team"
+    };
+    determineTitle(where = null) {
+        if (!where) {
+//            where = this.location.path();
+        }
+        const result = this.titles[where];
+        if (result) {
+            this.title = result;
+        } else {
+            this.title = "Story Creation";
+        }
+        return this.title;
     }
 
     syncError(err) {
@@ -76,7 +105,7 @@ export class SessionService {
             //     live: true
             // };
             //db.sync(remoteCoach, opts, syncError);
-        });
+        }).catch(err => console.log(err));
         return db;
     }
 
@@ -106,6 +135,4 @@ export class SessionService {
             project
         };
     }
-
-
 }

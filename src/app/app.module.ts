@@ -1,64 +1,28 @@
+import { NgModule, enableProdMode } from '@angular/core';
+
 import { BrowserModule  } from '@angular/platform-browser';
-import { NgModule }       from '@angular/core';
-import { AppComponent }   from './app';
+import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { environment} from './';
+import { RouterModule } from '@angular/router';
+import { MaterialModule } from '@angular/material';
 import { routing, appRoutingProviders } from './routes';
 
-import { enableProdMode } from '@angular/core';
-//import { bind, provide } from '@angular/core';
-import { LocationStrategy, HashLocationStrategy} from '@angular/common';
-
-import {AuthGuard} from './';
-import {DataService} from './shared';
-//import {HTTP_PROVIDERS, Http} from '@angular/http';
-import {AuthHttp, AuthConfig} from 'angular2-jwt';
-
-import { HttpModule } from '@angular/http';
-import { RouterModule } from '@angular/router';
-
-import { MaterialModule } from '@angular/material';
-
+import { environment} from './';
+import { AppComponent }   from './app';
 import { Story } from './story/story';
-import { About } from './about';
-import { Profile } from './profile';
-import { OrderComponent } from './order/order.component';
 import { PointsComponent } from './points/points.component';
+import { OrderComponent } from './order/order.component';
 import { TeamComponent } from './team/team.component';
+import { LoginComponent } from './login/login.component';
 
 if (environment.production) {
   enableProdMode();
 }
 
 @NgModule({
-    declarations: [
-      AppComponent,
-      Story,
-      About,
-      Profile,
-      OrderComponent,
-      PointsComponent,
-      TeamComponent
-    ],
-    providers: [
-//      APP_ROUTER_PROVIDER,
-//      bind(LocationStrategy).toClass(HashLocationStrategy),
-//      provide(AuthConfig, { useFactory: () => {
-//        return new AuthConfig();
-//      }}),
-//      AuthHttp,
-      AuthGuard,
-      DataService,
-      appRoutingProviders        
-    ],
-    imports:      [
-      BrowserModule,
-      HttpModule, 
-      ReactiveFormsModule,
-      RouterModule,
-      MaterialModule.forRoot(),
-      routing
-    ],
-    bootstrap:    [AppComponent],
+    declarations: [ AppComponent, Story, PointsComponent, OrderComponent, TeamComponent, LoginComponent ],
+    providers:    [ appRoutingProviders ],
+    imports:      [ BrowserModule, HttpModule, FormsModule, ReactiveFormsModule, RouterModule, MaterialModule.forRoot(), routing ],
+    bootstrap:    [ AppComponent ],
 })
 export class AppModule {}

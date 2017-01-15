@@ -24,6 +24,7 @@ export class TeamComponent implements OnInit {
   }
 
   constructor(private fb: FormBuilder, private session: SessionService) { 
+      session.isIn();    
       this.roles.push(new Role("Product Owner"));
       this.roles.push(new Role("Scrum Master"));
       this.roles.push(new Role("Tester"));
