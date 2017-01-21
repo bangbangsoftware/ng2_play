@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { SessionService } from '../session.service';
-import { Role, Member, Skill } from '../shared';
+import { Member, Skill } from '../shared';
 
 @Component({
   selector: 'app-team',
@@ -10,30 +10,22 @@ import { Role, Member, Skill } from '../shared';
 })
 export class TeamComponent implements OnInit {
 
-  roleMap: {[key:string]:Role} = {};
-  roles: Array<Role> = new Array<Role>();
+  roles: Array<string> = new Array<string>();
   teamForm: FormGroup;
   newRole: string;
   newEmail: FormControl;
   newName: FormControl;
 
-  mapItOut(){
-    this.roles.map((role)=>{      
-       this.roleMap[role.name] = role;
-    });
-  }
-
   constructor(private fb: FormBuilder, private session: SessionService) { 
       session.isIn();    
-      this.roles.push(new Role("Product Owner"));
-      this.roles.push(new Role("Scrum Master"));
-      this.roles.push(new Role("Tester"));
-      this.roles.push(new Role("Front end dev"));
-      this.roles.push(new Role("Back end dev"));
-      this.roles.push(new Role("UX"));
-      this.roles.push(new Role("Trainer"));
-      this.roles.push(new Role("Operation"));
-      this.mapItOut();
+      this.roles.push("Product Owner");
+      this.roles.push("Scrum Master");
+      this.roles.push("Tester");
+      this.roles.push("Front end dev");
+      this.roles.push("Back end dev");
+      this.roles.push("UX");
+      this.roles.push("Trainer");
+      this.roles.push("Operation");
 
       this.newName = new FormControl('', Validators.required);
       this.newEmail = new FormControl('', Validators.required);
@@ -55,7 +47,7 @@ export class TeamComponent implements OnInit {
 
   onSubmit() {
       const name = this.newName.value;
-      const role = this.roleMap[this.newRole];    
+      const role = this.newRole;    
       const email = this.newEmail.value;
       const skills = Array<Skill>();
       //this.session.team.push(new Member(name,role,email,skills));
@@ -72,7 +64,7 @@ export class TeamComponent implements OnInit {
       const memb = this.session.project.team[i];    
       this.newName.setValue(memb.name);
       this.newEmail.setValue(memb.email);
-      this.newRole = memb.roles[0].name;
+      this.newRole = memb.roles[0];
   }
 
 }

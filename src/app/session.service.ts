@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import {
     Member,
-    Role,
     Project,
     Skill,
     StoryGroup,
@@ -169,8 +168,8 @@ export class SessionService {
     }
 
     testingSetup() {
-        const scrumMaster = new Role("Scrum Master");
-        const roles = new Array<Role>();
+        const scrumMaster = "Scrum Master";
+        const roles = new Array<string>();
         roles.push(scrumMaster);
 
         const skills = new Array < Skill > ();
@@ -194,7 +193,7 @@ export class SessionService {
 
         return {
             user: {
-                roles: JSON.stringify(fred.roles),
+                roles: fred.roles,
                 email: fred.email,
                 skils: fred.skills,
                 currentProjectID: fred.currentProjectID

@@ -56,13 +56,10 @@ export class Countdown {
 export class Member {
     constructor(public _id: string,
                 public name: string,
-                public roles: Array<Role>,
+                public roles: Array<string>,
                 public email: string,
                 public skills: Array<Skill>,
                 public currentProjectID: number) {} }
-
-export class Role {
-    constructor(public name: string) {} }
 
 export class Absent {
     constructor(public member: Member,

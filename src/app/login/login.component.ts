@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { SessionService } from '../session.service';
-import { Role, Member, Skill } from '../shared';
+import { Member, Skill } from '../shared';
 
 @Component({
   selector: 'app-login',
