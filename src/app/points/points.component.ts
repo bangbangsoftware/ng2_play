@@ -36,6 +36,7 @@ export class PointsComponent implements OnInit {
   }
 
   ngOnInit() {
+     this.session.isIn();
   }
 
   showTasks(i,e){

@@ -18,6 +18,7 @@ export class Story implements OnInit {
     fb: FormBuilder;
     storyForm: FormGroup;
     newTitle: FormControl;
+    newType: FormControl;
     newDescriptionAs: FormControl;
     newDescriptionWant: FormControl;
     newDescriptionThat: FormControl;
@@ -30,11 +31,13 @@ export class Story implements OnInit {
     ac;
     colours: Array < string > = ["yellow", "red", "blue", "orange", "black", "green", "white", "brown"];
     coloursClass: Array < string > = ["yellow", "red", "blue", "orange", "black", "green", "white", "brown"];
+    storyTypes: Array < string > = ["feature", "technical debt", "missing functionality"];
     selectedColour: number = 6;
 
     constructor(fb: FormBuilder, private session: SessionService, private route: ActivatedRoute, private router: Router) {
         this.fb = fb;
         this.newTitle = new FormControl('', Validators.required);
+        this.newType = new FormControl('', Validators.required);
         this.newDescriptionAs = new FormControl('', Validators.required);
         this.newDescriptionWant = new FormControl('', Validators.required);
         this.newDescriptionThat = new FormControl('', Validators.required);
@@ -54,6 +57,7 @@ export class Story implements OnInit {
 
     ngOnInit(): void {
         console.log('story component woke....');
+        this.session.isIn();    
         this.storyID = this.route.snapshot.params['storyID'];
         this.back = this.route.snapshot.params['back'];
         if (this.storyID) {
@@ -100,7 +104,7 @@ export class Story implements OnInit {
             this.needAcs = true;
         } else if (this.storyForm.valid) {
             const acceptances = this.acs.map(a => new Acceptance(a));    
-            this.session.project.stories[this.listID].items.push(new StoryItem(this.newTitle.value, this.newColour.value, this.newDescriptionAs.value, this.newDescriptionWant.value, this.newDescriptionThat.value, -1, acceptances, []));
+            this.session.project.stories[this.listID].items.push(new StoryItem(this.newTitle.value, this.newType.value, this.newColour.value, this.newDescriptionAs.value, this.newDescriptionWant.value, this.newDescriptionThat.value, -1, acceptances, []));
             this.clearStory();
             if (this.back) {
                 this.router.navigate([this.back]);

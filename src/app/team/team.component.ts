@@ -35,7 +35,6 @@ export class TeamComponent implements OnInit {
       this.roles.push(new Role("Operation"));
       this.mapItOut();
 
-
       this.newName = new FormControl('', Validators.required);
       this.newEmail = new FormControl('', Validators.required);
       this.newRole = "";
@@ -73,7 +72,7 @@ export class TeamComponent implements OnInit {
       const memb = this.session.project.team[i];    
       this.newName.setValue(memb.name);
       this.newEmail.setValue(memb.email);
-      this.newRole = memb.role.name;
+      this.newRole = memb.roles[0].name;
   }
 
 }

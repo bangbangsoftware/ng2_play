@@ -1,18 +1,21 @@
 <div class="form">
     <md-card>
-            <md-card-content > 
+        <md-card-content>
             <form [formGroup]="storyForm" (ngSubmit)="onSubmit()">
                 <div>
                     <md-input #title autofocus class="title-input" required placeholder="Story Title"
-                    [formControl]="newTitle" tabindex="0"></md-input>
-                    What type - feature, technical debt, missing, 
-                </div>
+                        [formControl]="newTitle" tabindex="0"></md-input>
+                     <select>    
+                            <option selected ></option>
+                            <option *ngFor="let type of storyTypes">{{type}}</option>
+                    </select>        
+                 </div>
                 <div>Story Description
                     <md-input class="desc-input" required placeholder="As" [formControl]="newDescriptionAs"></md-input>
                     <md-input class="desc-input" required placeholder="I want" [formControl]="newDescriptionWant"></md-input>
                     <md-input class="desc-input" required placeholder="so that" [formControl]="newDescriptionThat"></md-input>
                 </div>
-                
+
                 <label *ngIf="arcs && acs.length > 0">Acceptance Criteria <span *ngIf="needAcs">This story need acceptance criteria</span>
                 </label>
                 <div>
@@ -23,17 +26,18 @@
                     </div>
                     <div>
                         <md-input #acceptance id="newAC" (keydown)="tab($event)" class="ac-input" (change)="checkAC()"
-                        placeholder="Acceptance Criteria" [formControl]="newAC">
+                            placeholder="Acceptance Criteria" [formControl]="newAC">
                         </md-input>
                         <button type="button" (focus)="buttonFocus()" (click)="addCriteria(newAc)" md-mini-fab><i class="material-icons" md-24>add</i>
                         </button>
                     </div>
                 </div>
                 <br>
-                 <div class="grid">
+                <div class="grid">
                     <md-grid-list cols="8" rowHeight="25px" gutterSize="8px">
                         <md-grid-tile *ngFor="let colour of colours; let c=index" (click)="selectColour(c)"
-                        [ngClass]="{'selected': c===selectedColour,'unselected': c!==selectedColour}" class="{{coloursClass[c]}}">{{colour}}</md-grid-tile>
+                            [ngClass]="{'selected': c===selectedColour,'unselected': c!==selectedColour}"
+                            class="{{coloursClass[c]}}">{{colour}}</md-grid-tile>
                     </md-grid-list>
                 </div>
                 <br>
@@ -45,18 +49,23 @@
         </md-card-content>
     </md-card>
 </div>
-
 <div class="card-container">
-    <md-card (click)="editStory(story)" class="{{story.colour}}" *ngFor="let story of session.stories.slice().reverse(); let c=index">
-        <md-card-title>{{session.stories.length-c}}. {{story.title}}</md-card-title>
+    <div>
+        <label>List</label>
+        <select (change)="listID = listNo">    
+           <option *ngFor="let list of session.project.stories; let listNo=index">{{list.name}}</option>
+        </select>
+    </div>
+</div>
+<div class="card-container">
+    <md-card (click)="editStory(story)" class="{{story.colour}}" *ngFor="let story of session.project.stories[listID].items.slice().reverse(); let c=index">
+        <md-card-title>{{session.project.stories[listID].items.length-c}}. {{story.title}}</md-card-title>
         <div>
-            As {{story.descriptionAs}}, I want
-            {{story.descriptionWant}}, so that
-            {{story.descriptionThat}}
+            As {{story.descriptionAs}}, I want {{story.descriptionWant}}, so that {{story.descriptionThat}}
         </div>
         <br>
         <md-card-content *ngFor="let ac of story.acs; let i=index">
-            <i>{{i+1}}. {{ac.name}}</i> 
+            <i>{{i+1}}. {{ac.name}}</i>
         </md-card-content>
         <md-card-actions align="end">
             <button md-button (click)="editStory(story)" color="primary">EDIT</button>
@@ -65,7 +74,6 @@
         </md-card-actions>
     </md-card>
 </div>
-
 <!--<div *ngIf="!myForm.valid && myForm.dirty">Form is invalid</div>
 <div *ngIf="!newStory.valid && newStory.dirty">newStory is invalid</div>
 

@@ -13,6 +13,7 @@ export class StoryGroup {
 
 export class StoryItem {
     constructor(public title: string,
+                public type: string,
                 public colour:string,
                 public descriptionAs: string,
                 public descriptionWant: string,
@@ -55,7 +56,7 @@ export class Countdown {
 export class Member {
     constructor(public _id: string,
                 public name: string,
-                public role: Role,
+                public roles: Array<Role>,
                 public email: string,
                 public skills: Array<Skill>,
                 public currentProjectID: number) {} }
