@@ -1,6 +1,7 @@
 import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Direction } from './direction';
 import {
     Member,
     Project,
@@ -8,7 +9,9 @@ import {
     StoryGroup,
     StoryItem,
     Acceptance,
-    Task
+    Task,
+    Role,
+    Position
 } from './shared/models';
 
 const PouchDB = require('pouchdb');
@@ -24,7 +27,8 @@ export class SessionService {
     public title: string;
     public lastLocation: string;
     public message: string;
-    constructor(private router: Router, private location: Location) {
+    public defaults;
+    constructor(private router: Router, private location: Location, private direction:Direction) {
         console.log("Hello from %cSession", "font-size:300%; color:orange");
     }
 
@@ -41,12 +45,7 @@ export class SessionService {
     }
 
     onward() {
-        if (this.lastLocation && this.projectDB) {
-            this.router.navigate([this.lastLocation]);
-        } else {
-            // @TODO needs to do it based on user    
-            this.router.navigate(['/story']);
-        }
+        this.direction.next(this);    
     }
 
     logout() {
@@ -74,7 +73,7 @@ export class SessionService {
                 })
                 .catch(err => {
                     console.error(err);
-                    reject(false);
+                   reject(false);
                 })
         });
     }
@@ -94,32 +93,57 @@ export class SessionService {
         //            }
         //        });
 
+        this.projectDB.get("defaults")
+            .then(defaults => {
+                console.log("got defaults");
+                this.defaults = defaults;
+            }).catch(err => {
+                if (err.status === 404) {
+                    this.projectDB.put(this.getDefaults()).then(d => {
+                        console.log("New defaults inserted");
+                    }).catch(err => console.log(err));
+                }
+            });       
+
         this.projectDB.getUser(ua)
             .then(user => {
                 console.log("Got user");
-                this.projectDB.putUser(user.name, {
+                const meta = {
                     metadata: tester.user
-                }).then(doc => {
-                    console.log("Updated user");
-                }).catch(err => {
-                    console.log(err);
-                });
-            })
-            .catch(err => {
+                };
+                return this.projectDB.putUser(user.name, meta);
+            }).catch(err => {
+                console.log(err);
+
+            }).then(ok => {
+                console.log("updated user");
+                return this.projectDB.getUser(ua)
+            }).catch(err => {
+                console.log(err);
+
+            }).then(user => {
+                console.log("Got updated user");
+                this.user = user;
+                return this.projectDB.get("" + user.currentProjectID)
+            }).catch(err => {
+                console.log(err);
+
+            }).then(proj => {
+                console.log("got user's current project");
+                this.project = proj;
+                return this.addMemberToTeam(this.projectDB, proj, this.user, "Scrum Master");
+            }).catch(err => {
+                if (err.status === 404) {
+                    this.projectDB.put(tester.project).then(d => {
+                        console.log("New project inserted");
+                    }).catch(err => console.log(err));
+                }
+
+            }).then(doc => {
+                this.onward();
+            }).catch(err => {
                 console.log(err);
             });
-
-        this.projectDB.get(tester.project._id + "").then(doc => {
-            this.project = doc;
-            this.onward();
-        }).catch(err => {
-            if (err.status === 404) {
-                this.projectDB.put(tester.project).then(d => {
-                    console.log("New project inserted");
-                    this.onward();
-                }).catch(err => console.log(err));
-            }
-        });
     }
 
     titles = {
@@ -167,33 +191,49 @@ export class SessionService {
         });
     }
 
-    testingSetup() {
-        const scrumMaster = "Scrum Master";
-        const roles = new Array<string>();
-        roles.push(scrumMaster);
+    addMemberToTeam(db, proj, member, role) {
+        proj.team[member._id] = role;
+        return db.put(proj._id, proj);
+    }
 
+    getDefaults(){
+        return {_id   :"defaults"
+               , roles:this.getRoles()};
+    }
+
+    getRoles(){
+      const roles = new Array<Role>();      
+      roles.push(new Role("Product Owner"));
+      roles.push(new Role("Scrum Master"));
+      roles.push(new Role("Tester"));
+      roles.push(new Role("Front end dev"));
+      roles.push(new Role("Back end dev"));
+      roles.push(new Role("UX"));
+      roles.push(new Role("Trainer"));
+      roles.push(new Role("Operation"));
+      return roles;
+    }
+
+    testingSetup() {
         const skills = new Array < Skill > ();
-        const fred = new Member("0", "Fred", roles, "cick.marter@gmail.com", skills, 0);
+        const fred = new Member("0", "Fred", "cick.marter@gmail.com", skills, 0);
 
         const backlogStories = new Array < StoryItem > ();
-        backlogStories.push(new StoryItem('Write a story', 'general', 'yellow', 'a po', 'to be able to input a story', 'the project can get features', -1, [new Acceptance("Should be able to do list of acceptance criteria")], []));
-        backlogStories.push(new StoryItem('Order a story', 'general', 'yellow', 'a po', 'to be able to move a story up and down the backlog', 'features are in correct order', -1, [new Acceptance("This backlog should keep its order")], []));
-        backlogStories.push(new StoryItem('Assign Points', 'general', 'yellow', 'the team', 'to be able to assign points to a story', 'velocity can be estimated', -1, [new Acceptance("Story should keep their points")], []));
-        backlogStories.push(new StoryItem('Write tasks', 'general', 'yellow', 'a scrum master', 'to be able to add sub tasks to a story', 'sprints can be planned', -1, [new Acceptance("The sub tasks should be associated with the story")], []));
-        backlogStories.push(new StoryItem('Create team', 'general', 'yellow', 'the team', 'to be able to enter team members', 'members are up to date', -1, [new Acceptance("a team member should have a role - dev,po or scrum master")], []));
-        backlogStories.push(new StoryItem('Write defintion of done', 'general', 'yellow', 'the team', 'to be able to enter dod', 'we can have confidence the story has now fully shipable artifacts', -1, [new Acceptance("This be broken down for the lifecycle of a feature")], []));
+        backlogStories.push(new StoryItem('Write a story', 'general', 'yellow', 'a po', 'to be able to input a story', 'the project can get features', -1, [new Acceptance("Should be able to do list of acceptance criteria")], [], 0));
+        backlogStories.push(new StoryItem('Order a story', 'general', 'yellow', 'a po', 'to be able to move a story up and down the backlog', 'features are in correct order', -1, [new Acceptance("This backlog should keep its order")], [],0));
+        backlogStories.push(new StoryItem('Assign Points', 'general', 'yellow', 'the team', 'to be able to assign points to a story', 'velocity can be estimated', -1, [new Acceptance("Story should keep their points")], [],0));
+        backlogStories.push(new StoryItem('Write tasks', 'general', 'yellow', 'a scrum master', 'to be able to add sub tasks to a story', 'sprints can be planned', -1, [new Acceptance("The sub tasks should be associated with the story")], [],0));
+        backlogStories.push(new StoryItem('Create team', 'general', 'yellow', 'the team', 'to be able to enter team members', 'members are up to date', -1, [new Acceptance("a team member should have a role - dev,po or scrum master")], [],0));
+        backlogStories.push(new StoryItem('Write defintion of done', 'general', 'yellow', 'the team', 'to be able to enter dod', 'we can have confidence the story has now fully shipable artifacts', -1, [new Acceptance("This be broken down for the lifecycle of a feature")], [],0));
 
         const backlog = new StoryGroup("backlog", backlogStories);
         const stories = new Array < StoryGroup > ();
-        const team = new Array < Member > ();
-        team.push(fred);
         stories.push(backlog);
 
-        const project = new Project("0", "Tardigrade", "The best way to manage agile development", stories, team);
+        const project = new Project("0", "Tardigrade", "The best way to manage agile development", stories,null);
 
         return {
             user: {
-                roles: fred.roles,
                 email: fred.email,
                 skils: fred.skills,
                 currentProjectID: fred.currentProjectID

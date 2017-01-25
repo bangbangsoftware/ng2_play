@@ -104,7 +104,7 @@ export class Story implements OnInit {
             this.needAcs = true;
         } else if (this.storyForm.valid) {
             const acceptances = this.acs.map(a => new Acceptance(a));    
-            this.session.project.stories[this.listID].items.push(new StoryItem(this.newTitle.value, this.newType.value, this.newColour.value, this.newDescriptionAs.value, this.newDescriptionWant.value, this.newDescriptionThat.value, -1, acceptances, []));
+            this.session.project.stories[this.listID].items.push(new StoryItem(this.newTitle.value, this.newType.value, this.newColour.value, this.newDescriptionAs.value, this.newDescriptionWant.value, this.newDescriptionThat.value, -1, acceptances, [], 0)); // @TODO impact field
             this.clearStory();
             if (this.back) {
                 this.router.navigate([this.back]);

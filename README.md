@@ -39,7 +39,15 @@ Signup - like slack
 
 *The endless problems with angular2*
 
-15th Jan 17
+25th jan 17
+-----------
+The old 
+
+```Uncaught TypeError: Cannot set property 'stack' of undefined```
+
+is back, turns out I didn't put a new service in a provider array in the component annotation. Rubbish error. BTW pouch / couch DB is really really good.
+
+15th jan 17
 -----------
 when the core team said angular2 was easier than angular1 they where wrong, zonejs didn't help either. Just burning threw time guessing what is causing:
 

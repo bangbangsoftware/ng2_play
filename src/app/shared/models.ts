@@ -5,7 +5,14 @@ export class Project {
                 public name: string,
                 public description: string,
                 public stories: Array <StoryGroup>,
-                public team: Array <Member>) {} }
+                public team: Array<Position>) {} }
+
+export class Position{
+    constructor(public role: Role,
+                public member: Member) {}}
+
+export class Role {
+    constructor(public name: string){} }                
 
 export class StoryGroup {
     constructor(public name: string,
@@ -20,7 +27,8 @@ export class StoryItem {
                 public descriptionThat: string,
                 public points: number,
                 public acs: Array < Acceptance > ,
-                public tasks: Array < Task > ) {} }
+                public tasks: Array < Task >,
+                public impact: number) {} }
 
 export class Acceptance {
     constructor(public name: string,
@@ -56,7 +64,6 @@ export class Countdown {
 export class Member {
     constructor(public _id: string,
                 public name: string,
-                public roles: Array<string>,
                 public email: string,
                 public skills: Array<Skill>,
                 public currentProjectID: number) {} }
@@ -81,6 +88,7 @@ export class Bug{
                 public title: string, 
                 public description: string, 
                 public assigned: Member, 
+                public impact: number,
                 public state: BugState) {} }
 
 export class BugState { 
